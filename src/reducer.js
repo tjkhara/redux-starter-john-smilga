@@ -9,52 +9,54 @@ const reducer = (state, action) => {
     }
   }
 
+  // ***** decrease start
   if (action.type === DECREASE) {
+    let tempCart = []
+
     if (action.payload.amount === 1) {
       // remove the item
-      return {
-        ...state.cart,
-        cart: state.cart.filter(
-          (cartItem) => action.payload.id !== cartItem.id
-        ),
-      }
+      tempCart = state.cart.filter(
+        (cartItem) => action.payload.id !== cartItem.id
+      )
     } else {
       // decrease the item
-      return {
-        ...state,
-        cart: state.cart.map((cartItem) => {
-          if (action.payload.id === cartItem.id) {
-            return {
-              ...cartItem,
-              amount: cartItem.amount - 1,
-            }
-          } else {
-            return {
-              ...cartItem,
-            }
-          }
-        }),
-      }
-    }
-  }
-
-  if (action.type === INCREASE) {
-    return {
-      ...state,
-      cart: state.cart.map((cartItem) => {
-        if (action.payload.id === cartItem.id) {
+      tempCart = state.cart.map((cartItem) => {
+        if (cartItem.id === action.payload.id) {
           return {
             ...cartItem,
-            amount: cartItem.amount + 1,
-          }
-        } else {
-          return {
-            ...cartItem,
+            amount: cartItem.amount - 1,
           }
         }
-      }),
+        return cartItem
+      })
     }
-  }
+
+    // Return the store
+    return {
+      ...state,
+      cart: tempCart,
+    }
+  } // ***** decrease end
+
+  // ***** Increase start
+  if (action.type === INCREASE) {
+    let tempCart = []
+
+    tempCart = state.cart.map((cartItem) => {
+      if (cartItem.id === action.payload.id) {
+        cartItem = {
+          ...cartItem,
+          amount: cartItem.amount + 1,
+        }
+      }
+      return cartItem
+    })
+
+    return {
+      ...state,
+      cart: tempCart,
+    }
+  } // ***** Increase end
 
   if (action.type === REMOVE) {
     return {
