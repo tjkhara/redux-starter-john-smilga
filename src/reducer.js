@@ -18,7 +18,10 @@ const reducer = (state, action) => {
   }
 
   if (action.type === REMOVE) {
-    console.log("trying to remove")
+    return {
+      ...state,
+      cart: state.cart.filter((cartItem) => cartItem.id !== action.payload.id),
+    }
   }
   return state
 }
