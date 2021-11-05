@@ -10,11 +10,50 @@ const reducer = (state, action) => {
   }
 
   if (action.type === DECREASE) {
-    console.log("trying to decrease")
+    if (action.payload.amount === 1) {
+      // remove the item
+      return {
+        ...state.cart,
+        cart: state.cart.filter(
+          (cartItem) => action.payload.id !== cartItem.id
+        ),
+      }
+    } else {
+      // decrease the item
+      return {
+        ...state,
+        cart: state.cart.map((cartItem) => {
+          if (action.payload.id === cartItem.id) {
+            return {
+              ...cartItem,
+              amount: cartItem.amount - 1,
+            }
+          } else {
+            return {
+              ...cartItem,
+            }
+          }
+        }),
+      }
+    }
   }
 
   if (action.type === INCREASE) {
-    console.log("trying to increase")
+    return {
+      ...state,
+      cart: state.cart.map((cartItem) => {
+        if (action.payload.id === cartItem.id) {
+          return {
+            ...cartItem,
+            amount: cartItem.amount + 1,
+          }
+        } else {
+          return {
+            ...cartItem,
+          }
+        }
+      }),
+    }
   }
 
   if (action.type === REMOVE) {
